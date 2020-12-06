@@ -8,6 +8,38 @@
 
 using namespace Rcpp;
 
+// get_sxprng
+SEXP get_sxprng();
+static SEXP _dqrng_get_sxprng_try() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(get_sxprng());
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _dqrng_get_sxprng() {
+    SEXP rcpp_result_gen;
+    {
+        rcpp_result_gen = PROTECT(_dqrng_get_sxprng_try());
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // dqset_seed
 void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream);
 static SEXP _dqrng_dqset_seed_try(SEXP seedSEXP, SEXP streamSEXP) {
@@ -370,6 +402,7 @@ END_RCPP
 static int _dqrng_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
+        signatures.insert("SEXP(*get_sxprng)()");
         signatures.insert("void(*dqset_seed)(Rcpp::IntegerVector,Rcpp::Nullable<Rcpp::IntegerVector>)");
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
@@ -386,6 +419,7 @@ static int _dqrng_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _dqrng_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("dqrng", "_dqrng_get_sxprng", (DL_FUNC)_dqrng_get_sxprng_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqset_seed", (DL_FUNC)_dqrng_dqset_seed_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqRNGkind", (DL_FUNC)_dqrng_dqRNGkind_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrunif", (DL_FUNC)_dqrng_dqrunif_try);
@@ -401,6 +435,7 @@ RcppExport SEXP _dqrng_RcppExport_registerCCallable() {
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_dqrng_get_sxprng", (DL_FUNC) &_dqrng_get_sxprng, 0},
     {"_dqrng_dqset_seed", (DL_FUNC) &_dqrng_dqset_seed, 2},
     {"_dqrng_dqRNGkind", (DL_FUNC) &_dqrng_dqRNGkind, 2},
     {"_dqrng_dqrunif", (DL_FUNC) &_dqrng_dqrunif, 3},

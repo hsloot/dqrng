@@ -46,6 +46,11 @@ generator rexp_impl = [] () {return exponential(*rng);};
 // [[Rcpp::interfaces(r, cpp)]]
 
 // [[Rcpp::export(rng = false)]]
+SEXP get_sxprng() {
+  return Rcpp::XPtr<dqrng::rng64_t::element_type>(rng.get(), false);
+}
+
+// [[Rcpp::export(rng = false)]]
 void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
   uint64_t _seed = dqrng::convert_seed<uint64_t>(seed);
   if (stream.isNotNull()) {

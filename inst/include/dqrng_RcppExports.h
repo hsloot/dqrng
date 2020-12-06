@@ -24,6 +24,26 @@ namespace dqrng {
         }
     }
 
+    inline SEXP get_sxprng() {
+        typedef SEXP(*Ptr_get_sxprng)();
+        static Ptr_get_sxprng p_get_sxprng = NULL;
+        if (p_get_sxprng == NULL) {
+            validateSignature("SEXP(*get_sxprng)()");
+            p_get_sxprng = (Ptr_get_sxprng)R_GetCCallable("dqrng", "_dqrng_get_sxprng");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_get_sxprng();
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
     inline void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
         typedef SEXP(*Ptr_dqset_seed)(SEXP,SEXP);
         static Ptr_dqset_seed p_dqset_seed = NULL;
