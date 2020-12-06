@@ -12,3 +12,5 @@
 ^include$
 ^cran-comments\.md$
 ^revdep$
+^\.clang_complete$
+^include$

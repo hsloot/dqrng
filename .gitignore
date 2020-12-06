@@ -10,3 +10,5 @@ inst/doc
 vignettes/*.R
 vignettes/*.html
 ^docs$
+
+.clang_complete
