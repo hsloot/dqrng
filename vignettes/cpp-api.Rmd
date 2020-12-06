@@ -25,7 +25,7 @@ The following functions are also available if you include `dqrng.h`.
 ## Setting seed and RNG type
 
 ```cpp
-void dqrng::dqset_seed(Rcpp::IntegerVector seed, 
+void dqrng::dqset_seed(Rcpp::IntegerVector seed,
                        Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue)
 void dqrng::dqRNGkind(std::string kind, const std::string& normal_kind = "ignored")
 ```
@@ -48,7 +48,7 @@ void dqrng::dqRNGkind(std::string kind, const std::string& normal_kind = "ignore
 Rcpp::NumericVector dqrng::dqrunif(size_t n, double min = 0.0, double max = 1.0)
 double dqrng::runif(double min = 0.0, double max = 1.0)
 ```
-`n`	
+`n`
 :   number of observations
 
 `min`
@@ -64,7 +64,7 @@ Rcpp::NumericVector dqrng::dqrnorm(size_t n, double mean = 0.0, double sd = 1.0)
 double dqrng::rnorm(double mean = 0.0, double sd = 1.0)
 ```
 
-`n`	
+`n`
 :   number of observations
 
 `mean`
@@ -80,7 +80,7 @@ Rcpp::NumericVector dqrng::dqrexp(size_t n, double rate = 1.0)
 double dqrng::rexp(double rate = 1.0)
 ```
 
-`n`	
+`n`
 :   number of observations
 
 `rate`
@@ -113,3 +113,14 @@ Rcpp::NumericVector dqrng::dqsample_num(double m, double n, bool replace = false
 :    sample from range `[offset, offset + m)`
 
 The two functions are used for "normal" and "long-vector" support in R.
+
+
+## Accessing the global RNG
+
+To use the the global RNG, you must include `dqrng_get_rng.h`. The function `get_rng()` returns a non-owning raw pointer of type `dqrng::rng64_t::element_type*`.
+
+```cpp
+dqrng::rng64_t::element_type* get_rng()
+```
+
+__Warning__: Expert-use only; do not modify (explicitely) or delete the returned pointer (in particular: don't wrap the returned pointer in a smart pointer).
